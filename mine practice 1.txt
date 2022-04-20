@@ -1,0 +1,245 @@
+
+select * from jumbo;
+select *, new_age = age +10 from jumbo as new_age;
+select *, new_salary = salary +10000 from jumbo where name = 'nidhi_khote';
+select *, increament = salary*1.03 from jumbo;
+select *, increament = salary*1.2 , decreament = salary/0.2, new_age= age +10, nem_marks= marks-20 from jumbo;
+
+--- order by
+select * from jumbo order by salary desc ;
+select * from jumbo order by salary ; --- no need to write asc for ascending order
+select * from jumbo order by name ; --- shows names in alphabetical order & null shows first
+
+----delete
+delete jumbo where name = 'suraj_sukhdeve';
+ 
+ --- update
+ update jumbo set name = 'suraj sukhdeve' where name = 'suraj_sukhadeve';
+ update jumbo set city = 'Goa' where name = 'abhay_bahadure';
+ update jumbo set address = '05_pandu_nagar' where name = 'vishnu_gawali';
+ update jumbo set passing_year = 2018 where name = 'pranav_gharat'; -- after adding column in jumbo
+ update jumbo set passing_year = (2002, 2018, 2020, 2010, 2002, 2018, 2017, 2003) where id between 103 and 111 ; ---error occuring
+ update jumbo set passing_year in (2002, 2018, 2020, 2010, 2002, 2018, 2017, 2003) where id between 103 and 111 ; --- error occuring
+ update jumbo set passing_year = 2002 where id =103 ;  --- pass
+ update jumbo set passing_year (2002,2004) where id =104, 105 ; ---  fail
+ update jumbo set (geneder, passing_year) values ('M', 2002) where name is null; ---- fail
+
+ --- alter (add)
+ alter table jumbo add column Passing_Year int ;  --- no need to add column word after add
+  alter table jumbo add Passing_Year int ; --- pass (while using add 'column' keyword not to be used after 'add')
+  alter table jumbo add removalum1 int ; ---pass
+  alter table jumbo add removalum2 varchar(10) ; --pass
+
+  --insert for null value in new column
+  insert into passing_year from jumbo values (2018); ---incorret
+  insert into jumbo (passing_year) values (2018); --- this 2018 value has been inserted in whole null row 
+  insert into jumbo (passing_year) values (2018) where name = 'pranav_gharat';--- error occuring as 'Incorrect syntax near the keyword 'where''
+
+  ---alter (drop)
+  alter table jumbo drop column removalum; --- pass (while using drop 'drop column' keyword to be used)
+  alter table jumbo drop column removalum1, removalum2; ----pass
+
+  ---alter (change data type)
+  alter table jumbo alter column city varchar (50); ---pass
+  alter table jumbo alter column marks varchar (10); ---pass (though marks was int before, data remained same)
+
+--- row number, rank, dense_rank
+ select * from jumbo;
+ select *, row_number () over (order by age desc)as new_row from jumbo; ----  pass 
+---(new column with serialwise row no. & descending order age assigns row no. from high age to low)
+
+ select * , rank () over (order by age desc) as new_rank from jumbo;---- pass 
+---(2 person have 46 age thus rank showed 1 for both & next age assigned as 3 due to row no=3)
+
+ select *, dense_rank () over (order by age desc) as new_dense_rank from jumbo;---pass 
+---(2 person have 46 age thus rank showed 1 for both & likewise in descending age 2,3,3,4 etc)
+
+ select *, row_number () over (order by age) as new_row, rank() over (order by age) as new_rank, dense_rank () over (order by age) as new_dense_rank from jumbo; --pass
+
+ select *, row_number () over (order by salary desc)as new_salary, row_number () over (order by age desc)as new_row from jumbo;--pass 
+---(new row column generated as per desc age & according to that new salary column generated i.e. new salary no. assigned as per new row no)
+ select *, row_number () over (order by age desc) as new_row, row_number () over (order by salary desc) as new_salary from jumbo; --- pass
+ --- (vice versa of above querry, considered from salary)
+
+ select *, row_number () over (order by age) as new_row1, row_number () over (order by salary desc) as new_row2 from jumbo;---pass
+ ---(new row2 (i.e. salary) taking into consideration and according to that new row1 (i.e. age) shwoing results)
+
+select *, row_number () over (order by marks) as new_row, dense_rank () over (order by salary) as new_dense_rank from jumbo;---pass
+---(results showing results according to new dense rank (salary) & accordingly new row(marks) has assigned numbers)
+
+select *, dense_rank () over (order by salary) as new_dense_rank, row_number () over (order by marks) as new_row from jumbo ;----pass
+---(results are vice versa of above querry)
+
+select *, dense_rank() over (order by salary desc) as new_rank from jumbo; ---pass (HW)
+--- (how to find 4th salary or age) -- answer is not precise it is to be find in CTE method
+
+----CTE (common table execution)
+with new_table as ---pass (HW)
+(select *, dense_rank () over (order by age desc) as ranking from jumbo)
+select * from new_table where ranking = 4 ; ---(4th age (desc order) will display)
+
+with xyz_table as   ----pass (HW)
+(select *, dense_rank () over (order by salary desc)as ranking from jumbo)
+select * from xyz_table where ranking = 4 ; ---(4th salary will display with whole row data)
+
+--- whatsapp question
+select * from jumbo;
+select *, pranav_salary = 1.2*salary, abhay_salary=1.15*salary, adarsh_salary=1.30*salary from jumbo where name in ('pranav_gharat','abhay_bahadure','adarsh_lanjwar');
+-- showing 3 different salary of 3 names
+
+--partition by
+with new_table as
+(select *, dense_rank () over ( partition by department order by age desc)as ranking from jumbo)
+select * from new_table 
+---pass. order by age desc and dept wise from auto to so on... (due to dense rank) age wise rank has alloted i.e. 2 person have 46 age thus they have rank 1
+
+with new_table as
+(select *, dense_rank () over (partition by department desc order by age desc)as ranking from jumbo)
+select * from new_table;
+--- fail. syntax error in desc i.e. after dept we canno use desc
+
+with new_table as 
+(select *, row_number () over (partition by department order by age desc) as ranking from jumbo)
+select * from new_table;
+---pass. order by age desc and dept wise from auto to so on...(due to row no) no has assign serially like in auto dept 1,2,3 likewise though age is same
+
+with new_table as
+(select *, dense_rank () over (partition by department order by age desc)as ranking from jumbo)
+select * from new_table where ranking = 1;
+---pass. shows rank 1 according to higher age as we entered order by age desc  
+
+with new_table as
+(select *, row_number() over (partition by department order by age desc) as row_no from jumbo)
+select * from new_table where row_no = 1;
+---pass. all single single dept will show with row no 1
+
+---top
+select top 3* from jumbo order by salary desc; -- pass. (MINE QUE.)
+
+select * from over_Test;
+select *, dense_rank() over ( order by gender )as row from over_test; --- (HW)
+select *, row_number () over (order by gender) as row from over_test;--- (HW)
+
+with new_table as
+(select *, dense_rank () over (partition by gender order by age)as rank from over_test)
+select * from new_table where rank = 1;
+---pass. but all gender got '1' number and not in f,m,f,m form
+
+with new_table as 
+(select *, rank () over (partition by gender order by firstname)as new from over_test)
+select * from new_table
+---pass. but according to alphabetical order firstname column changes and gender column comes first --ans - f f f f m m m m 
+
+with new_table as 
+(select *, row_number () over (partition by gender order by gender) as new from over_test)
+select * from new_table order by new, gender;
+--pass.  f m f m f m
+
+with new_table as
+(select *, row_number () over (order by gender) as new from over_test)
+select * from new_table order by new, gender;
+--- partition not added thus in column f f f comes 1 2 3 ... and m m m comes 9 10 11 ..., it is to be come in again 1 2 3 so partition by to be used
+
+--(HW) how to find duplicacy records
+select * from jumbo;
+with new_table as 
+(select *, dense_rank () over (partition by department order by age) as new from jumbo)
+select * from new_table where new > 1 ;
+
+with new_table as 
+(select *, row_number () over (partition by name order by age) as new from jumbo)
+select * from new_table where new > 1 ; 
+---pass.. found name shashank name duplicacy.
+---if i want to delete duplicacy then,,
+ with new_table as
+ (select *, row_number () over (partition by name order by age)as new from jumbo)
+ delete new_table where new > 1;
+ --pass .. 2 duplicate name of shashank has been deleted. 
+
+ --- constraint -check & auto increament
+ create table check_table (id int identity (11, 1), marks int check (marks > 40));
+ select * from check_table;
+ insert into check_table values (45); ---pass and id starts from 11
+ insert into check_table values (40); --- fail as limit add as > 40. Thus 40 not passing
+ insert into check_table values (50); ---pass but here id no. comes as 13
+ insert into check_table values (39); -- fail due to check constraint
+ insert into check_table values (100); --pass, id no -15
+ delete check_table where id = 12; ---just wanted to delete 12 id no row and want to check whether id no 13 gets changed or not.. querry executing but id no. not changing
+--check constraint for gender m/f (HW)
+create table check_table1 (id int, gender varchar (5) check (gender in ('m', 'f')) );
+select * from check_table1;
+insert into check_table1 values (101, 'M'); --pass
+insert into check_table1 values (102, 'F'); --pass
+insert into check_table1 values (103, 'A'); --- fail 
+insert into check_table1 values (104, 'MF'); --- fail
+
+--Default & auto increament
+create table default_table (id int identity, city varchar (15) default 'nagpur');
+select * from default_table;
+insert into default_table values ('nashik');
+insert into default_table values ---fail.. was checking if directly all values inserted or not
+insert into default_table values (default); --pass
+insert into default_table values (3); --3 value inserted in city column
+create table default_table1 (id int, city varchar (15) default 'nagpur');
+select * from default_table1;
+insert into default_table1 values (101, default); --pass
+insert into default_table1 values (102); --fail
+insert into default_table1 (id) values (102); --pass
+insert into default_table1 values (103, 'umred'); --pass
+
+-- foreign key
+create table Department (DID int primary key identity, DEPT varchar (20));
+select * from Department
+insert into department values ('civil');
+insert into department values ('mech');
+insert into department values ('auto');
+insert into department values ('entc');
+create table student (SID int identity, name varchar (20), DID int foreign key references department (DID));
+select * from student ;
+select * from Department;
+insert into student values ('mangesh', 2);
+insert into student values ('saurabh', 2);
+insert into student values ('pranav', 1);
+insert into student values ('abhay', 3);
+
+--Group by
+select * from jumbo; --emploee table not created
+select name, min (salary) as new_salary from jumbo group by name; --null value comes first, min salary shown as per names in alphabetial order
+-- i.e. abhay, adarsh, aditya, aishwarya, gaurav likewise - salary shown like 35k, 45k, 60k.. so on
+select department, max (salary) as max_salary from jumbo group by department; ---null first, every dept shown their high salary & only single single dept
+-- high salary shown -- no repeat dept
+select department, max (age) as new_age from jumbo group by name; -- fail 
+select department, max (age) as new_age from jumbo group by department; ---pass - max age shown of each dept
+select id, avg (salary) as new_avg from jumbo group by name ; ---fail
+select id, avg (salary) as new_avg from jumbo group by id ; --pass - id and salary shown
+select id, count (department) as count from jumbo group by department; ---fail
+select id, count (department) as count from jumbo group by id; --pass - dept count showing as per id i.e. null-0, 101-1,102-1,103-1,.. so on
+select department, count (department)as count from jumbo group by department;---pass - all dept count shown i.e. null-0, auto-5, civil-2, likewise
+---i want city wise dept count (MINE QUE)
+select city, count (department) as count from jumbo group by city;--pass - citywise dept count shown -bamani-1, nagpur-10 so on.. & and all executed column
+--- showing in alphabetical orders
+select department, sum (salary) as sum from jumbo group by department; --pass (HW -notes)
+select department, top 2 (salary) as new_salary from jumbo group by department; --fail incorrect sentence, seems top function not suitable for group by
+-- if i want to know min salary of each dept (MINE QUE)
+select department, min (salary) as min_salary from jumbo group by department;--pass
+
+--Having
+select * from jumbo;
+select name, count (name) from jumbo group by name having count (name) > 1;--pass- no result found as no duplicate name in jumbo
+select department, count (department) as count from jumbo group by department having count (department)>1; --pass-
+--result shows dept count which is greater than 1 & dept hich has count 1 is not showing
+select department, sum (salary) as sum from jumbo group by department having sum (salary) > 70000;--pass (HW)
+--result shows dept which have sum salary greater than 70000 & 70000 and below dept sum salary not showing i.e. civil=70k, null, text=55k.
+select id, min (salary) as min from jumbo group by id having salary between 30000 and 40000; --fail
+--- error occurs as after having aggreagate function must be there for salary 
+select id, min (salary) as min from jumbo group by id having min(salary) between 30000 and 40000; --pass (HW)
+--showing id wise salary between 30k to 40k (MINE QUE)
+select department, sum (salary) as sum from jumbo group by department having sum (salary) between 30000 and 40000; --pass
+--no result shows as sum of salary of dept is higher than 40k.
+select department, sum (salary) as sum from jumbo group by department having sum (salary) between 40000 and 60000;--pass
+--results show textile and ele dept which have salaries 50k and 55k respectively.
+--display the department name with highest salary (HW-notes) (not showing only 1 highest salary-might can get by using having clause)
+select department, max (salary) as max_salary from jumbo group by department; --pass. not sure about ans all dept is showing with high salary
+select department, max(salary) as max_salary from jumbo group by department order by max_salary desc; --pass - just trying to bring highest salary on top
+select department, max (salary) as max_salary from jumbo group by department having max(salary) > 90000; --pass - this could happen only if i known the values
+-- not satisfied with ans

@@ -1,0 +1,47 @@
+select * from info
+select name , min(salary) as new_salary from info group by name ;
+create table jumbo (ID INT, NAME VARCHAR (25), ADDRESS VARCHAR (40), CITY VARCHAR (15), PIN_CODE INT, PAN VARCHAR (15), MOBILE_NO VARCHAR (15), DOB VARCHAR (15), AGE INT, DEPARTMENT VARCHAR (15), GENEDER VARCHAR (10), MARKS INT, SALARY INT );
+select * from jumbo ;
+insert into jumbo values (101, 'Pranav_Durugkar', '5_senapati_nagar', 'Nagpur', 440024, 'DPFPD7246C', '8329758373', '17_SEP_1996', 26, 'Auto', 'M', 85, 20000);
+insert into jumbo values (102, 'Pranav_Gharat', '7_pipla_nagar', 'Nagpur', 440034, 'DPFPD12123', '8329712123', '24_APR_1996', 26, 'Mech', 'M', 92, 40000);
+insert into jumbo values (103, 'Saurabh_Pathade', '114_hudkeshwar', 'Nagpur', 440014, 'DPFPD13131', '8793073058', '02_DEC_1996', 26, 'Mech', 'M', 95, 35000);
+insert into jumbo values (104, 'Mangesh_Deokar', '32_sham_nagar', 'Chinchpur_BK', 400001, 'DPFPD14144', '8793045454', '11_OCT_1995', 27, 'Auto', 'M', 98, 50000);
+insert into jumbo values (105, 'Aishwarya_Patil', '24_rajaram_nagar', 'Islampur', 415414, 'DPFPD14122', '8793045422', '01_AUG_1998', 24, 'IT', 'F', 100, 100000);
+insert into jumbo values (106, 'Abhay_Bahadure', '04_butibori_nagar', 'Bamani', 440015, 'DPFPD12124', '8806214617', '04_AUG_1994', 28, 'Mining', 'M', 85, 25000);
+insert into jumbo values (106, 'Adarsh_Lanjwar', '08_senapati_nagar', 'Nagpur', 440034, 'DPFPD11111', '7276103437', '06_NOV_1998', 24, 'HM', 'M', 90, 45000);
+update jumbo set id = 107 where pin_code = 440034 ;
+update jumbo set id = 102 where mobile_no = 8329712123 ;
+insert into jumbo values (108, 'Komal_Fating', '108_narsala_nagar', 'Nagpur', 440036, 'DPFPD22222', '7276102222', '13_JUN_1997', 25, 'entc', 'F', 100, 80000);
+insert into jumbo values (109, 'Nidhi_Khote', '02_jaripatka_nagar', 'Nagpur', 440046, 'DPFPD33333', '8308409777', '02_DEC_1999', 23, 'HM', 'F', 85, 40000);
+insert into jumbo values (110, 'Suhas_Kambale', '12_feku_nagar', 'Barshi', 410216, 'DPFPD44444', '8888812451', '10_DEC_1996', 26, 'Text', 'M', 90, 50000);
+insert into jumbo values (111, 'Vishnu_Gawali', '12_zopu_nagar', 'Latur', 410217, 'DPFPD55555', '8888812345', '30_FEB_1986', 36, 'Mining', 'M', 50, 70000);
+insert into jumbo values (112, 'Shiv_Barse', '03_faltu_nagar', 'Nanded', 420420, 'DPFPD66666', '8888888881', '07_SEP_1990', 31, 'Civil', 'T', 95, 40000);
+insert into jumbo values (113, 'Aditya_Nagelwar', '420_full_faltu_nagar', 'Nagpur', 420440, 'DPFPD77777', '8888888420', '24_OCT_1990', 31, 'Auto', 'M', 100, 60000);
+insert into jumbo values (114, 'Shashank_Talmale', '123_alankar_nagar', 'Nagpur', 450450, 'DPFPD77788', '8888888450', '24_OCT_1990', 20, 'Civil', 'M', 80, 30000);
+insert into jumbo values (114, 'Shashank_Talmale', '123_alankar_nagar', 'Nagpur', 450450, 'DPFPD77788', '8888888450', '24_OCT_1990', 20, 'Civil', 'M', 80, 30000);
+--delete jumbo where name = shashank_talmale ;
+insert into jumbo values (114, 'Shashank_Talmale', '123_alankar_nagar', 'Nagpur', 450450, 'DPFPD77788', '8888888450', '24_OCT_1990', 20, 'Civil', 'M', 80, 30000);
+insert into jumbo values (115, 'Tushar_Dhone', '04_senapati_nagar', 'Nagpur', 440034, 'DPFPD77715', '8888888420', '26_JULY_1996', 26, 'Mech', 'M', 75, 35000);
+insert into jumbo values (116, 'Saurabh_Rokade', '04_senapati_nagar', 'Nagpur', 440036, 'DPFPD77716', '8888888421', '26_AUG_1996', 26, 'Ele', 'M', 90, 55000);
+insert into jumbo values (117, 'Gaurav_More', '143_football_nagar', 'Phaltan', 440440, 'DPFPD77720', '8282828217', '26_JAN_1976', 46, 'Auto', 'T', 100, 90000);
+insert into jumbo values (118, 'Sohan_Kalageri', '11_nusta_kala_nagar', 'Solapur', 411422, 'DPFPD42420', '8282829090', '15_AUG_1976', 46, 'Auto', 'T', 45, 30000);
+insert into jumbo values (119, null, null, 'Nashik', 411444, null, null, null, null, null, 'M', 75, 30000); 
+insert into jumbo (id, name, department, marks, salary) values (119, 'Suraj_Sukhdeve', 'Civil', 89, 40000); 
+insert into jumbo (id, name, salary) values (119, 'Suraj_Sukhadeve', 40000);
+select * from jumbo ;
+select * from info ;
+
+----------------------------------------------------------------------------
+select * from jumbo ;
+insert into jumbo (id, salary) values (120, 50000);
+select * from jumbo where name = 'nidhi_khote';
+--select * from jumbo where name = ('mangesh_deokar', 'aishwarya_patil'); (syntax error)
+select * from jumbo where salary > 50000 ;
+--select * from jumbo where name = 'nidhi'; (shows blank, full name to be inserted)
+select * from jumbo where name in ('pranav_durugkar', 'vishnu_gawali');
+select * from jumbo where name in ('pranav_durugkar', 'vishnu_gawali','saurabh_pathade');
+select * from jumbo where salary <= 20000;
+select * from jumbo where geneder = 't';
+select * from jumbo where marks between 45 and 75;
+create table set1 (S_ID int, SNAME varchar (20));
+create table set2 (S_ID int, SNAME varchar (20));

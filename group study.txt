@@ -1,0 +1,102 @@
+select * from jumbo;
+--functions'
+select min (salary) as new_salary from jumbo;
+select * min (salary) from jumbo; --fail
+select avg (salary) as avg from jumbo;
+select * from jumbo;
+select sum (salary) as avg from jumbo;
+
+select count (*) from jumbo;
+select count (salary) from jumbo;
+insert into jumbo (passing_year) values (null);
+insert into jumbo (id, city) values (117, 'goa');
+
+select count (marks) from jumbo;
+
+select top 2 * from jumbo;
+select top 3 * from jumbo;
+select top 3 * from jumbo order by marks desc;
+select top 3 (salary) from jumbo;
+select top 3 * from jumbo order by salary desc;
+
+select top 4 (salary) from jumbo order by salary asc;
+select * from jumbo;
+delete jumbo where city is null;
+
+select distinct city from jumbo;
+select count (city) from jumbo where city = 'goa';
+select count (name) from jumbo where name in ('saurabh_pathade', 'suhas_kambale')
+select count (city) from jumbo where city in ('nagpur', 'nanded'); ---results 13 pass
+select count (city) from jumbo where (city = 'nagpur') and (city = 'nanded');----results 0
+select count (city) from jumbo where (city = 'nagpur') or (city = 'nanded');----results 13
+
+---sql server functions
+select * from jumbo;
+--upper
+select upper ('saurabh');
+select *, upper (city) from jumbo;
+select *, upper (city) as cap_city from jumbo;
+select *, upper ('pranav_gharat') from jumbo where name = 'pranav_gharat';
+select *, upper (name), upper (city) from jumbo;---pass
+select *, upper (name) as new_name, upper (city) as new_city from jumbo; ---pass
+
+--lower
+
+--substring
+select *, upper (substring (name, 2, 4)) from jumbo;  ----pass
+
+--lenght
+select *, len (name) from jumbo; --pass
+
+--reverse
+select *, reverse (name) from jumbo; ---pass
+
+--replicate
+select *, replicate (city, 3) from jumbo;--pass
+select *, replicate (city, 3) from jumbo where city = 'nanded';--pass
+select *, upper (replicate (city, 3)) from jumbo where city = 'nanded'; --pass
+select *, replicate (upper (city)) from jumbo where city = 'nanded'; --- error
+
+---replace
+select *, replace (name, 'a', 'i' ) from jumbo; --pass
+select *, replace (name, 'a', '*' ) from jumbo; --pass
+
+--concat
+--method 1
+select *, city + name as loc from jumbo; ---pass
+select *, name+address+city+pan+dob+department as full2dhamal from jumbo; --pass
+select *, city + '      ' + name as loc from jumbo; ---pass
+select *, age+marks as new from jumbo;--- pass addition 
+select *, age+' '+marks as new from jumbo;--- pass still added
+select *, age-' '-marks as new from jumbo;--- pass results -59
+select *, -age - marks as new from jumbo;--- pass 
+---method 2
+select *, concat (name, city) as new from jumbo; --pass
+select *, concat (name , ' ', city) as nde from jumbo;--pass
+select *, concat (age, ' ', marks) as nde from jumbo;--pass space occurs
+select *, concat (age, marks) as nde from jumbo;--pass 0 space occurs no addition
+
+---trim
+select ('class');
+class
+select ('     claSS    ');
+SELECT LTRIM('     claSS    ');
+SELECT RTRIM('claSS    ');
+claSS
+SELECT RTRIM(LTRIM('     claSS    '));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
